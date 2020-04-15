@@ -1,7 +1,9 @@
 #include <cstdint>
+#include <string>
 #include "modular_arithmetic.hpp"
 #include "elliptic_curve.hpp"
 
+using std::string;
 
 
 Point::Point(Galois x, Galois y)
@@ -43,6 +45,18 @@ Galois Point::get_x()
 Galois Point::get_y()
 {
 	return this->y;
+}
+
+string Point::get_str()
+{
+	if (this->is_infinity)
+	{
+		return "(infty)";
+	}
+	else
+	{
+		return "(" + std::to_string(this->x.get_value()) + ", " + std::to_string(this->y.get_value()) + ")";
+	}
 }
 
 
@@ -100,4 +114,19 @@ Point EllipticCurve::sub_points(Point& P, Point& Q)
 {
 	Point Q_min = -Q;
 	return add_points(P, Q_min);
+}
+
+int_fast64_t EllipticCurve::get_mod()
+{
+	return this->q;
+}
+
+Galois EllipticCurve::get_a()
+{
+	return this->a;
+}
+
+Galois EllipticCurve::get_b()
+{
+	return this->b;
 }

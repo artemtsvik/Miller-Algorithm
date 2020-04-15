@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include "modular_arithmetic.hpp"
 
 #ifndef ELLIPTIC_CURVE_H
@@ -24,6 +25,8 @@ public:
 	Galois get_x();
 
 	Galois get_y();
+
+	std::string get_str();
 };
 
 class EllipticCurve
@@ -43,6 +46,12 @@ public:
 	Point add_points(Point& P, Point& Q);
 
 	Point sub_points(Point& P, Point& Q);
+
+	int_fast64_t get_mod();
+
+	Galois get_a();
+
+	Galois get_b();
 };
 
 

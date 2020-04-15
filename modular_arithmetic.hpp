@@ -19,9 +19,17 @@ public:
 
     bool operator == (const Galois& other);
 
+    bool operator == (Galois& other);
+
     bool operator == (int_fast64_t other);
 
+    bool operator != (const Galois& other);
+
+    bool operator != (int_fast64_t other);
+
     Galois& operator = (const Galois& other);
+
+    Galois& operator = (int_fast64_t other);
 
     Galois operator+ (const Galois& other);
 
@@ -39,9 +47,17 @@ public:
 
     Galois pow(int_fast64_t other);
 
-    int_fast64_t get_value();
+    Galois operator += (const Galois other);
 
-    int_fast64_t get_mod();
+    Galois operator -= (const Galois other);
+
+    Galois operator *= (const Galois other);
+
+    Galois operator /= (const Galois other);
+
+    const int_fast64_t get_mod();
+
+    const int_fast64_t get_value();
 };
 
 #endif

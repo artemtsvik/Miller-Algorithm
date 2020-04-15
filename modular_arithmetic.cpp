@@ -78,15 +78,43 @@ bool Galois::operator == (const Galois& other)
     return (this->value == other.value) && (this->mod == other.mod);
 }
 
+bool Galois::operator == (Galois& other)
+{
+    return (this->value == other.value) && (this->mod == other.mod);
+}
+
 bool Galois::operator == (int_fast64_t other)
 {
-    return this->value == other;
+    return this->value == other % this->mod;
+}
+
+bool Galois::operator != (const Galois& other)
+{
+    return (this->value != other.value) || (this->mod != other.mod);
+}
+
+bool Galois::operator != (int_fast64_t other)
+{
+    return this->value != other % this->mod;
 }
 
 Galois& Galois::operator = (const Galois& other)
 {
-    this->mod = other.mod;
-    this->value = other.value;
+    mod = other.mod;
+    value = other.value;
+    return *this;
+}
+
+Galois& Galois::operator = (int_fast64_t other)
+{
+    if (other < 0)
+    {
+        this->value = other % this->mod + this->mod;
+    }
+    else
+    {
+        this->value = other % this->mod;
+    }
     return *this;
 }
 
@@ -130,14 +158,12 @@ Galois Galois::operator* (const Galois& other)
         throw "Modules must be equal";
     }
 
-    return Galois(this->value * other.value, this->mod);
+    return Galois((this->value) * other.value, this->mod);
 }
 
 Galois Galois::operator* (int_fast64_t other)
 {
-
-    Galois res = Galois(other * this->value, this->mod);
-    return res;
+    return Galois(other * this->value, this->mod);
 }
 
 Galois Galois::inverse()
@@ -176,7 +202,7 @@ Galois Galois::inverse()
 
 Galois Galois::operator/ (const Galois& other)
 {
-    Galois a = other;
+    Galois a(other);
     return (*this) * a.inverse();
 }
 
@@ -198,12 +224,36 @@ Galois Galois::pow(int_fast64_t other)
     return res;
 }
 
-int_fast64_t Galois::get_value()
+Galois Galois::operator += (const Galois other)
+{
+    *this = *this + other;
+    return *this;
+}
+
+Galois Galois::operator -= (const Galois other)
+{
+    *this = *this - other;
+    return *this;
+}
+
+Galois Galois::operator *= (const Galois other)
+{
+    *this = *this * other;
+    return *this;
+}
+
+Galois Galois::operator /= (Galois other)
+{
+    *this = *this / other;
+    return *this;
+}
+
+const int_fast64_t Galois::get_value()
 {
     return this->value;
 }
 
-int_fast64_t Galois::get_mod()
+const int_fast64_t Galois::get_mod()
 {
     return this->mod;
 }
