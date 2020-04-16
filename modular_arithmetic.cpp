@@ -161,6 +161,16 @@ Galois Galois::operator* (const Galois& other)
     return Galois((this->value) * other.value, this->mod);
 }
 
+Galois Galois::operator* (Galois& other)
+{
+    if (this->mod != other.mod)
+    {
+        throw "Modules must be equal";
+    }
+
+    return Galois((this->value) * other.value, this->mod);
+}
+
 Galois Galois::operator* (int_fast64_t other)
 {
     return Galois(other * this->value, this->mod);

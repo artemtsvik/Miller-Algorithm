@@ -11,6 +11,9 @@ using std::unordered_map;
 using std::string;
 
 #if DEBUG
+/**
+* Бітове представлення 32-х бітного безнакового числа
+*/
 string print_bits(uint_fast32_t s)
 {
 	string res;
@@ -26,6 +29,9 @@ string print_bits(uint_fast32_t s)
 #endif
 
 
+/**
+* Розділ 4.3 курсової
+*/
 Ratio miller_algorithm(EllipticCurve& E, Point& P, uint_fast32_t r)
 {
 	if (!E.is_point_on_curve(P))
@@ -114,20 +120,29 @@ int main()
 	std::cin >> a;
 	std::cout << "b = ";
 	std::cin >> b;
-
-	int_fast64_t x_, y_;
-	std::cout << std::endl << "Enter point P = (x, y)" << std::endl
-		<< "x = ";
-	std::cin >> x_;
-	std::cout << "y = ";
-	std::cin >> y_;
-
 	EllipticCurve E = EllipticCurve(a, b, p);
-	Galois x = Galois(x_, p), y = Galois(y_, p);
-	Point P = Point(x, y);
+	int_fast64_t x_, y_;
+	Galois x, y;
+	Point P;
+
+	do
+	{
+		std::cout << std::endl << "Enter point P = (x, y)" << std::endl
+			<< "x = ";
+		std::cin >> x_;
+		std::cout << "y = ";
+		std::cin >> y_;
+
+		x = Galois(x_, p), y = Galois(y_, p);
+		P = Point(x, y);
+	} while (!E.is_point_on_curve(P));
+
+	uint_fast32_t r = E.order(P);
+
+	std::cout << std::endl << "r = " << r << std::endl;
 
 	std::cout << std::endl << "Calculate:" << std::endl;
-	Ratio f = miller_algorithm(E, P, 5);
+	Ratio f = miller_algorithm(E, P, r);
 
 	std::cout << "Result:" << std::endl;
 	std::cout << f.get_str() << std::endl;

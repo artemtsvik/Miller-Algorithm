@@ -24,8 +24,14 @@ Point::Point(bool is_infinity)
 
 bool Point::operator== (const Point& other)
 {
-	return ((this->x == other.x) && (this->y == other.y));
+	return ((this->x == other.x) && (this->y == other.y)) || (this->is_infinity && other.is_infinity);
 }
+
+bool Point::operator!= (const Point& other)
+{
+	return ((this->x != other.x) || (this->y != other.y)) || (this->is_infinity != other.is_infinity);
+}
+
 
 Point Point::operator-()
 {
@@ -115,6 +121,23 @@ Point EllipticCurve::sub_points(Point& P, Point& Q)
 	Point Q_min = -Q;
 	return add_points(P, Q_min);
 }
+
+int_fast64_t EllipticCurve::order(Point& P)
+{
+	if (P.isinfty())
+	{
+		return 1;
+	}
+	int_fast64_t res = 1;
+	Point R(P);
+	do
+	{
+		R = this->add_points(R, P);
+		res++;
+	} while (!R.isinfty());
+	return res;
+}
+
 
 int_fast64_t EllipticCurve::get_mod()
 {

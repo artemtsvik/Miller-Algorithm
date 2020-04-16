@@ -53,11 +53,16 @@ Poly::Poly(uint_fast32_t mod)
 Poly Poly::operator+ (const Poly& other)
 {
 	Poly res(*this);
+	Galois koef;
 	for (const std::pair<const string, Galois>& el : other.data)
 	{
 		if (res.data.find(el.first) != res.data.end())
 		{
-			res.data[el.first] += el.second;
+			koef = res.data[el.first] + el.second;
+			if (koef != 0)
+			{
+				res.data[el.first] = koef;
+			}
 		}
 		else
 		{
@@ -71,9 +76,14 @@ Poly Poly::operator+ (const Poly& other)
 Poly Poly::operator* (const Galois& other)
 {
 	Poly res(*this);
+	Galois koef;
 	for (const std::pair<const string, Galois>& el : res.data)
 	{
-		res.data[el.first] *= other;
+		koef = res.data[el.first] * other;
+		if (koef != 0)
+		{
+			res.data[el.first] = koef;
+		}
 	}
 
 	return res;
@@ -85,6 +95,7 @@ Poly Poly::operator*(const Poly& other)
 
 	uint_fast16_t sum1, sum2, degrees1[2], degrees2[2];
 	string key;
+	Galois koef;
 	for (const std::pair<const string, Galois>& el1 : other.data)
 	{
 		split(el1.first, degrees1, ", ");
@@ -96,15 +107,22 @@ Poly Poly::operator*(const Poly& other)
 			key = std::to_string(sum1) + ", " + std::to_string(sum2);
 			if (res.data.find(key) != res.data.end())
 			{
-				res.data[key] += el2.second * el1.second;
+				koef = el2.second * el1.second + res.data[key];
+				if (koef != 0)
+				{
+					res.data[key] = el2.second * el1.second;
+				}
 			}
 			else
 			{
-				res.data[key] = el2.second * el1.second;
+				koef = el2.second * el1.second;
+				if (koef != 0)
+				{
+					res.data[key] = koef;
+				}
 			}
 		}
 	}
-
 	return res;
 }
 
